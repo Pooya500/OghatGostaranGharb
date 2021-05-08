@@ -1,6 +1,7 @@
-from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import CallbackContext, CommandHandler, MessageHandler, Updater, Filters
+from telegram import Update, ReplyKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
+from telegram.ext import CallbackContext, CommandHandler, MessageHandler, Updater, Filters, InlineQueryHandler
 from unidecode import unidecode
+from uuid import uuid4
 
 from time_ir import Time
 
@@ -51,12 +52,27 @@ class Bot:
         text = self.date_text + '\n\n' + self.oghat_text
         update.message.reply_text(text, parse_mode='HTML')
 
+    def inline_handler(self, update: Update, context: CallbackContext) -> None:
+        text = self.date_text + '\n\n' + self.oghat_text
+        result = [
+            InlineQueryResultArticle(
+                id=str(uuid4()),
+                title='📅 تقویم امروز',
+                input_message_content=InputTextMessageContent(
+                    message_text=text,
+                    parse_mode='HTML'
+                )
+            )
+        ]
+        update.inline_query.answer(result, cache_time=60)
+
     def main(self):
         updater = Updater('TOKEN', use_context=True)
         dpa = updater.dispatcher.add_handler
 
         dpa(CommandHandler('start', self.start_command, run_async=True))
         dpa(MessageHandler(Filters.regex(r'^📅 تقویم امروز'), self.get_today, run_async=True))
+        dpa(InlineQueryHandler(self.inline_handler, run_async=True))
 
         updater.start_polling()
         updater.idle()
