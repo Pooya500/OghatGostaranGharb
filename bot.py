@@ -3,7 +3,15 @@ from telegram.ext import CallbackContext, CommandHandler, MessageHandler, Update
 from unidecode import unidecode
 from uuid import uuid4
 
+import schedule
+import threading
+
 from time_ir import Time
+
+
+def run_pending():
+    schedule.run_pending()
+    threading.Timer(1, run_pending).start()
 
 
 class Bot:
@@ -13,6 +21,8 @@ class Bot:
         self.oghat_text: str = ''
 
         self.generate_text()
+        schedule.every().day.at("00:01").do(self.generate_text())
+
         self.main()
 
     def generate_text(self):
