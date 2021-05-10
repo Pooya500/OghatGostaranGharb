@@ -3,6 +3,10 @@
 This tool gathers data like Gregorian calendar, Islamic calendar, shamsi calendar, Sunset and sunrise time and Astrological sign #even from time.ir and you can use them in your projects.
 
 
+# Telegram Bot
+
+You can use telegram bot to get this data inline in your conversations or get them directly in bot. 
+
 
 # Example
 تاریخ شمسی : ۱۴۰۰/۰۲/۲۰
