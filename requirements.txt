@@ -3,3 +3,4 @@ schedule
 requests
 beautifulsoup4
 unidecode
+lxml
