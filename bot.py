@@ -6,7 +6,13 @@ from uuid import uuid4
 import schedule
 import threading
 
+import os
+
 from time_ir import Time
+
+
+PORT = int(os.environ.get('PORT', 5000))
+TOKEN = '1858215359:AAG--4FDv3EN5K_hBFFjA2LNt0D8rZn849w'
 
 
 def run_pending():
@@ -77,14 +83,17 @@ class Bot:
         update.inline_query.answer(result, cache_time=60)
 
     def main(self):
-        updater = Updater('TOKEN', use_context=True)
+        updater = Updater(TOKEN, use_context=True)
         dpa = updater.dispatcher.add_handler
 
         dpa(CommandHandler('start', self.start_command, run_async=True))
         dpa(MessageHandler(Filters.regex(r'^📅 تقویم امروز'), self.get_today, run_async=True))
         dpa(InlineQueryHandler(self.inline_handler, run_async=True))
 
-        updater.start_polling()
+        # updater.start_polling()
+        updater.start_webhook(listen="0.0.0.0", port=int(PORT),
+                              url_path=TOKEN,
+                              webhook_url='https://oghatgostarangharb.herokuapp.com/' + TOKEN)
         updater.idle()
 
 
