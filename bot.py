@@ -27,7 +27,7 @@ class Bot:
         self.oghat_text: str = ''
 
         self.generate_text()
-        schedule.every().day.at("00:01").do(self.generate_text())
+        schedule.every().day.at("00:01").do(self.generate_text)
 
         self.main()
 
